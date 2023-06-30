@@ -1,0 +1,25 @@
+<div>
+  <div class="card" style="margin:10% 20%">
+    <div class="card-header">
+      Login with your Account
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label for="InputEmail1" class="form-label">Email address</label>
+          <input type="email" name="email" (change)="onChange($event)" class="form-control" id="InputEmail1" aria-describedby="emailHelp">
+        </div>
+        <div class="col-md-6">
+          <label for="InputPassword" class="form-label">Password</label>
+          <input type="password" name="password" (change)="onChange($event)" class="form-control" id="InputPassword">
+        </div>
+        <button (click)="onSubmit()" class="btn btn-primary">Submit</button>
+        <span *ngIf="isError" class="text-danger text-center">{{errorMessage}}</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      Or you can create new Account <a href="#">Click Here</a>
+    </div>
+  </div>
+</div>
+

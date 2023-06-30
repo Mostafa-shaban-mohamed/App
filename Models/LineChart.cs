@@ -4,7 +4,7 @@ namespace App.Models;
 
 [NotMapped]
 public class LineChart{
-    public int x { get; set; }
+    public List<int> x { get; set; }
 
-    public int y { get; set; }
+    public List<int> y { get; set; }
 }

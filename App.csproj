@@ -18,4 +18,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ClientApp\ClientApp\enviroment\" />
+    <Folder Include="ClientApp\ClientApp\src\Components\dashboard\PieChart\" />
+    <Folder Include="ClientApp\ClientApp\src\shared\models\" />
+    <Folder Include="ClientApp\ClientApp\src\shared\services\" />
+  </ItemGroup>
+
 </Project>

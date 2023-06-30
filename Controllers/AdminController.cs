@@ -8,6 +8,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Security.Principal;
 
 namespace App.Controllers;
 
@@ -26,21 +28,45 @@ public class AdminController : ControllerBase
 
     //Login Method 
     [AllowAnonymous]
-    [HttpPost("authenticate")]
-    public IActionResult Authenticate([FromBody] LoginViewModel model)
+    [HttpPost("login")]
+    public ReturnValueResponse<string> Authenticate([FromBody] LoginViewModel model)
     {
-        //use salt key to hash password
-        var user = _context.Admins.First(m => m.Email == model.Email);
-        model.Password = Convert.ToBase64String(ComputeHMAC_SHA256(Encoding.UTF8.GetBytes(model.Password), user.SaltKey));
-        IActionResult response = Unauthorized();
-        if (user != null && (user.Email == model.Email && user.Password == model.Password))
+        var response = new ReturnValueResponse<string>()
         {
-            var tokenString = GenerateJSONWebToken(user);
-            
-            response = Ok(new { token = tokenString });
+            Data = "",
+            ErrorMessage = "Email or Password Invalid",
+            IsSuccess = false,
+            StatusCode = System.Net.HttpStatusCode.OK,
+            SuccessMessage = ""
+        };
+
+        //use salt key to hash password
+        var user = _context.Admins.FirstOrDefault(m => m.Email == model.Email);
+        if(user == null)
+        {
+            return response;
+        }
+        model.Password = Convert.ToBase64String(ComputeHMAC_SHA256(Encoding.UTF8.GetBytes(model.Password), user.SaltKey));
+        
+        if(user.Email == model.Email && user.Password == model.Password)
+        {
+            response.Data = GenerateJSONWebToken(user);
+            response.IsSuccess = true;
+            response.SuccessMessage = "User is Valid";
+            response.ErrorMessage = string.Empty;
+            response.StatusCode = System.Net.HttpStatusCode.OK;
         }
 
         return response;
+    }
+
+    public static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+    {
+        using (var hmac = new System.Security.Cryptography.HMACSHA512())
+        {
+            passwordSalt = hmac.Key;
+            passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+        }
     }
 
     private string GenerateJSONWebToken(Admin userInfo)
@@ -54,7 +80,7 @@ public class AdminController : ControllerBase
 
         var token = new JwtSecurityToken(_config["Jwt:Issuer"],
           _config["Jwt:Issuer"],
-          null,
+          claims,
           expires: DateTime.Now.AddMinutes(120),
           signingCredentials: credentials);
 
@@ -72,6 +98,7 @@ public class AdminController : ControllerBase
 
     // GET api/<AdminController>/{id}
     [HttpGet("{id}")]
+    [Authorize]
     public Admin Get(int id) //calling for a record where ID = id
     {
         return _context.Admins.First(m => m.ID == id);
@@ -116,6 +143,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize]
     public void Delete(int id)
     {
         var admin = _context.Admins.FirstOrDefault(m => m.ID == id);

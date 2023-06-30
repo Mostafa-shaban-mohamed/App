@@ -10,9 +10,11 @@ namespace App.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+//[Authorize]
 public class UserController : ControllerBase
 {
     private ApplicationDbContext _context;
+    private IConfiguration _config;
     public UserController(ApplicationDbContext context)
     {
         _context = context;
@@ -35,38 +37,43 @@ public class UserController : ControllerBase
 
     //Pie Chart
     [HttpGet("PieChart")]
-    public IEnumerable<PieChart> PieChartMethod()
+    public PieChart PieChartMethod()
     {
-        var users = _context.Users.ToList();
-        var datapoints = new List<PieChart>();
-        foreach (var lang in _context.Languages.ToList())
+        var datapoints = new PieChart();
+        var series = new List<int>();
+        var lables  = new List<string>();
+        foreach (var item in _context.Languages)
         {
-            var data = new PieChart()
+            if(_context.Users.Count(m => m.Language.StartsWith(item.Language_Name)) > 0)
             {
-                y = users.Where(x => x.Language == lang.Language_Name).Count(),
-                label = lang.Language_Name
-            };
-            datapoints.Add(data);
+                series.Add(_context.Users.Count(m => m.Language.StartsWith(item.Language_Name)));
+                lables.Add(item.Language_Name);
+            }
         }
+        datapoints.series = series;
+        datapoints.labels = lables;
+
         return datapoints;
     }
 
     //Line Chart
     [HttpGet("LineChart")]
-    public IEnumerable<LineChart> LineChartMethod()
+    public LineChart LineChartMethod()
     {
         var users = _context.Users.ToList();
-        var datapoints = new List<LineChart>();
+        var datapoints = new LineChart();
+        var xs = new List<int>();
+        var ys = new List<int>();
         var max = _context.Users.Max(x => x.Age);
         var min = _context.Users.Min(x => x.Age);
         for (int i = min; i <= max; i++)
         {
-            datapoints.Add(new LineChart()
-            {
-                x = i,
-                y = _context.Users.Where(x => x.Age == i).Count()
-            });
+            xs.Add(i);
+            ys.Add(_context.Users.Count(x => x.Age == i));
         }
+        datapoints.x = xs;
+        datapoints.y = ys;
+
         return datapoints;
     }
 
@@ -74,7 +81,7 @@ public class UserController : ControllerBase
     [HttpGet("export")]
     public ActionResult export()
     {
-        string constr = "Server=DESKTOP-MAT9FS5;Database=ApplicationDB;Trusted_Connection=True;MultipleActiveResultSets=True;";
+        string constr = _config["ConnectionStrings:DefaultConnection"];
         using (SqlConnection con = new SqlConnection(constr))
         {
             using (SqlCommand cmd = new SqlCommand("SELECT * FROM Users"))

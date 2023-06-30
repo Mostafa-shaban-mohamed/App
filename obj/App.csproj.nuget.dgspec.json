@@ -1,25 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "D:\\VS_Projects\\Xceed Task\\App\\App.csproj": {}
+    "F:\\ASP.NET Core Projects\\ERP_System\\Old_ERP\\App.csproj": {}
   },
   "projects": {
-    "D:\\VS_Projects\\Xceed Task\\App\\App.csproj": {
+    "F:\\ASP.NET Core Projects\\ERP_System\\Old_ERP\\App.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\VS_Projects\\Xceed Task\\App\\App.csproj",
+        "projectUniqueName": "F:\\ASP.NET Core Projects\\ERP_System\\Old_ERP\\App.csproj",
         "projectName": "App",
-        "projectPath": "D:\\VS_Projects\\Xceed Task\\App\\App.csproj",
+        "projectPath": "F:\\ASP.NET Core Projects\\ERP_System\\Old_ERP\\App.csproj",
         "packagesPath": "C:\\Users\\Mosta\\.nuget\\packages\\",
-        "outputPath": "D:\\VS_Projects\\Xceed Task\\App\\obj\\",
+        "outputPath": "F:\\ASP.NET Core Projects\\ERP_System\\Old_ERP\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Mosta\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Mosta\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -38,10 +40,6 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
-            "CsvHelper": {
-              "target": "Package",
-              "version": "[30.0.1, )"
-            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[6.0.5, )"
@@ -60,17 +58,9 @@
               "target": "Package",
               "version": "[6.0.4, )"
             },
-            "Microsoft.Office.Interop.Excel": {
-              "target": "Package",
-              "version": "[15.0.4795.1001, )"
-            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.3, )"
-            },
-            "Syncfusion.EJ2.AspNet.Core": {
-              "target": "Package",
-              "version": "[20.3.0.61, )"
             },
             "bootstrap": {
               "target": "Package",
@@ -96,7 +86,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.403\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
         }
       }
     }
